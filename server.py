@@ -1,7 +1,9 @@
 import re
+
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__, static_url_path='/static')
+#openai.api_key = os.getenv("OPENAI_API_KEY_TEST2")
 
 @app.route('/openai', methods=['POST'])
 def openai():
@@ -20,7 +22,6 @@ def openai():
 def process_openai_script(conversation, behavior):
     # Write your OpenAI Python script here
     # This function should handle the OpenAI script execution and return the output
-
     import os
     import openai
 
