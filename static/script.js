@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var homeBtn = document.getElementById('homeBtn');
   var backBtn = document.getElementById('backBtn');
   var useCaseDropdown = document.getElementById('useCaseDropdown');
-  var role = 'user'
-  var behavior = 'You are a Test Data Manager for a Bank, providing accounts for UAT testing, the output should always be in JSON format'
+  var role = 'user';
+  var behavior = 'You are a Test Data Manager for a Bank, providing accounts for UAT testing, the output should always be in JSON format';
 
    // Handle the Home button
   homeBtn.addEventListener('click', function() {
@@ -18,8 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     window.history.back();
   });
 
-  // Handle the dropdown selection and redirect to the appropriate page
+  // Handle the dropdown selection and modify the behavior
     useCaseDropdown.addEventListener('change', function() {
+
     var selectedUseCase = useCaseDropdown.value;
     switch (selectedUseCase) {
       case 'TestDataCreation':
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       // Add more cases for other use cases
       default:
+        behavior = '';
         break;
     }
   });
@@ -44,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var conversation = [];  // Initialize an empty conversation array
 
   submitButton.addEventListener('click', function() {
+
     var inputText = document.getElementById('inputText').value;
 
     // Append the static line to the user's input
@@ -68,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
       try{
         var formattedOutput = JSON.stringify(JSON.parse(data.output), null, 2);
         outputDiv.innerHTML = '<pre>' + formattedOutput + '</pre>';
-
+        
       }
       catch {
         outputDiv.innerHTML = data.output;  
@@ -77,12 +80,9 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log("ChatGPT Response:", data.output);
     })
     .catch(function(error) {
-      console.log(error);
-
-   
+      console.log(error);   
 
     });
-
 
 
   });
