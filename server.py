@@ -7,16 +7,17 @@ app = Flask(__name__, static_url_path='/static')
 def openai():
     # Retrieve the conversation history from the request
     conversation = request.json['conversation']
+    behavior = request.json['behavior']
     #print(f'Request to ChatGPT :  + {conversation}')
 
 
     # Process the conversation using OpenAI Python script
-    output_text = process_openai_script(conversation)
+    output_text = process_openai_script(conversation, behavior)
 
     # Return the output as JSON
     return jsonify({'output': output_text})
 
-def process_openai_script(conversation):
+def process_openai_script(conversation, behavior):
     # Write your OpenAI Python script here
     # This function should handle the OpenAI script execution and return the output
 
@@ -26,7 +27,8 @@ def process_openai_script(conversation):
     openai.api_key = os.getenv("OPENAI_API_KEY_TEST2")
 
     # Create a list of messages from the conversation
-    messages = [{"role": "system", "content": "You are a Test Data Manager for a Bank, providing accounts for UAT testing"}]
+    #"You are a Test Data Manager for a Bank, providing accounts for UAT testing"
+    messages = [{"role": "system", "content": behavior}]  
     for message in conversation:
         messages.append(message)
 
@@ -37,6 +39,7 @@ def process_openai_script(conversation):
     )
 
     chat_response = completion.choices[0].message.content
+    print(f'Chat GPT behavior: {behavior}')
     print(f'Chat GPT Response: {chat_response}')
     messages.append({"role": "assistant", "content": chat_response})
 
@@ -58,6 +61,10 @@ def process_openai_script(conversation):
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
+
+@app.route('/CustomerServiceIVR')
+def customerServiceIVR():
+    return app.send_static_file('CustomerServiceIVR.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
