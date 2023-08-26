@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       case 'DetermineEligibility':
         behavior = 'You are the business team for a Bank running the offers for customers, based on their profile and account history'
-        testDataRoleTag = false;
+        testDataRoleTag = true;
         break;
       case 'CustomerServiceIVR':
         behavior = 'You are the customer service agent for BinaryBank, responding to customer based on their Account information. Start the conversation with a greeting, asking Name and Account Number'
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
       body: JSON.stringify({ conversation: conversation, behavior: behavior })
     })
     .then(function(response) {
-      console.log("Response Headers : ", response.headers.get('openai-usage'));
+      console.log("Response Headers : ", response.headers);
       return response.json();
     })
     .then(function(data) {
