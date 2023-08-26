@@ -62,9 +62,6 @@ def process_openai_script(conversation, behavior):
 def index():
     return app.send_static_file('index.html')
 
-@app.route('/CustomerServiceIVR')
-def customerServiceIVR():
-    return app.send_static_file('CustomerServiceIVR.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
