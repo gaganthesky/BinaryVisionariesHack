@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var behavior = 'You are a Test Data Manager for a Bank, providing accounts for UAT testing, the output should always be in JSON format';
   var testDataRoleTag = true;
   var aioutputDivFlag = false;
+  var robotThoughtBubble = document.querySelector('.robot'); // Add this line
   
   var copyTestDataButton = document.getElementById('copyTestDataBtn'); // Get the copy button
 
@@ -60,13 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
         aioutputDivFlag = false;
         break;
       case 'CustomerServiceIVR':
-        behavior = 'You are the customer service agent for BinaryBank, responding to customer based on their Account information. Start the conversation with a greeting, asking Name and Account Number'
+        behavior = 'You are the customer service agent for BinaryBank, responding to customer based on their Account information. Start the conversation with a greeting, asking Name and Account Number, after that look into Account Data and respond accordingly. The responses can be in Simple English language, no need to have JSON output for this response'
         role = 'assistant';
         testDataRoleTag = false;
         aioutputDivFlag = true;
         break;
       case 'CheckPasswordSecurity':
-        behavior = 'You are a security bot, providing feedback to the customers on their password strength, based on the provided customer data. The password is considered weak if it is the combination of any information that can be easily available to anyone trying to guess the password, like a combination of day month or year of birth, or a combination of letters in name and address. You have to respond back with the strenght of the password, in terms weak, strong, very strong, along with a reason'
+        behavior = 'You are a security bot, providing feedback to the customers on their password strength, based on the provided customer data. The password is considered weak if it is the combination of any information that can be easily available to anyone trying to guess the password, like a combination of day month or year of birth, or a combination of letters in name and address. You have to respond back with the strenght of the password, in terms weak, strong, very strong, along with a reason.  The responses can be in Simple English language, no need to have JSON output for this response'
         role = 'user';
         testDataRoleTag = false;
         aioutputDivFlag = true;
@@ -82,9 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   var conversation = [];  // Initialize an empty conversation array
+  robotThoughtBubble.style.opacity = 0.8; 
 
   submitButton.addEventListener('click', function() {
 
+    robotThoughtBubble.style.visibility = 'visible';
     var content;
 
     var inputText = document.getElementById('inputText').value;
@@ -108,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if(!aioutputDivFlag){
-      console.log("I am resetting the aioutputDiv");
+      //console.log("I am resetting the aioutputDiv");
       aioutputDiv.innerHTML = '';
     }
 
@@ -127,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(function(response) {
       //console.log("Response Headers : ", response.headers);
+      robotThoughtBubble.style.visibility = 'hidden';
       return response.json();
     })
     .then(function(data) {
@@ -151,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log("ChatGPT Response:", data.output);
     })
     .catch(function(error) {
+      robotThoughtBubble.style.visibility = 'hidden';
       console.log(error);   
 
     });

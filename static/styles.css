@@ -89,5 +89,49 @@ select {
   color: #fff;
 }
 
+/* Robot container styles */
+.robot-container {
+  position: fixed;
+  top: 100px;
+  left: 400px;
+  width: 200px;
+  height: 200px;
+  background-image: url('robot-icon.png'); /* Replace with your robot icon image */
+  background-size: cover;
+  z-index: 9999;
+}
+
+/* Thought bubble styles */
+.robot-container .robot {
+  width: 140px;
+  height: 100px;
+  background-color: #ccc; /* Updated to grey color */
+  border-radius: 50% 50% 50% 0;
+  position: absolute;
+  top: -90px; /* Adjust the top position */
+  right: -100px; /* Adjust the left position */
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Add animation for pulsing dots */
+.robot-container .robot::after {
+  content: " . . . ";
+  font-size: 32px;
+  color: #333;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
 
 /* Add more styles as needed */
