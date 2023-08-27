@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var outputDiv = document.getElementById('TestDataOutput');
   var aioutputDiv = document.getElementById('AIOutput');
   var tokenUsedDIV = document.getElementById('TokenUsedDIV');
+  var amountSpentDIV = document.getElementById('TotalSpendDIV');
   var homeBtn = document.getElementById('homeBtn');
   var backBtn = document.getElementById('backBtn');
   var useCaseDropdown = document.getElementById('useCaseDropdown');
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var predefinedStringCheckbox = document.getElementById('predefinedStringCheckbox');
   var count = 0;
+  var numberOfTokens = 0;
 
   var defaultJSONPrompt = ".\nWhen you respond to me, do not give commentary. Please make your entire response a valid JSON object with valid JSON formatting and syntax.";//"\nInclude no other commentary, just provide RFC8295 compliant JSON result";
   var jsonStructure3 = "{ \"accounts\": [ { \"name\": string, \"accountId\": string, \"phoneNumber\": string, \"creditCards\": [ { \"creditCardNumber\": string, \"availableCreditLimit\": number, \"totalCreditLimit\": number } ], \"checkingAccounts\": [ { \"accountNumber\": string, \"balance\": number } ], \"address\": { \"line1\": string, \"line2\": string, \"city\": string, \"state\": string, \"zipCode\": string }, \"email\": string } ] }";
@@ -118,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log("Request sent to server : ", content)
     // Add the user's input to the conversation
+    numberOfTokens += (content.length/4);
     conversation.push({ role: role, content: content });
 
     // Send the entire conversation to the server for processing
@@ -150,8 +153,13 @@ document.addEventListener('DOMContentLoaded', function() {
         aioutputDiv.innerHTML = data.output;  
       }
 
+      numberOfTokens += (data.output.length/4);
+
+      tokenUsedDIV.innerHTML = "Tokens used : " + (numberOfTokens).toFixed(0);
+      amountSpentDIV.innerHTML = "Amount Billed $ " + (numberOfTokens/1000*0.004).toFixed(4);
 
       conversation.push({ role: role, content: data.output });
+      //console.log("Tokens used : " + numberOfTokens);
       console.log("ChatGPT Response:", data.output);
     })
     .catch(function(error) {
