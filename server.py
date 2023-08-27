@@ -20,7 +20,6 @@ def openai():
     return jsonify({'output': output_text})
 
 def process_openai_script(conversation, behavior):
-    # Write your OpenAI Python script here
     # This function should handle the OpenAI script execution and return the output
     import os
     import openai

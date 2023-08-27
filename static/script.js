@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  cohttp://127.0.0.1:5000/static/TestDataCreation.htmlnsole.log("Script loaded and DOM is ready.");
+  console.log("Script loaded and DOM is ready.");
   var submitButton = document.getElementById('submitBtn');
   var outputDiv = document.getElementById('TestDataOutput');
   var aioutputDiv = document.getElementById('AIOutput');
@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var role = 'user';
   var behavior = 'You are a Test Data Manager for a Bank, providing accounts for UAT testing, the output should always be in JSON format';
   var testDataRoleTag = true;
+  var aioutputDivFlag = false;
 
    // Handle the Home button
   homeBtn.addEventListener('click', function() {
@@ -28,24 +29,33 @@ document.addEventListener('DOMContentLoaded', function() {
     switch (selectedUseCase) {
       case 'TestDataCreation':
         behavior ='You are a Test Data Manager for a Bank, providing accounts for UAT testing, the output should always be in JSON format'
+        role = 'assistant';
         testDataRoleTag = true;
+        aioutputDivFlag = false;
         break;
       case 'DetermineEligibility':
         behavior = 'You are the business team for a Bank running the offers for customers, based on their profile and account history'
+        role = 'user';
         testDataRoleTag = true;
+        aioutputDivFlag = false;
         break;
       case 'CustomerServiceIVR':
         behavior = 'You are the customer service agent for BinaryBank, responding to customer based on their Account information. Start the conversation with a greeting, asking Name and Account Number'
+        role = 'assistant';
         testDataRoleTag = false;
+        aioutputDivFlag = true;
         break;
       case 'CheckPasswordSecurity':
         behavior = 'You are a security bot, providing feedback to the customers on their password strength, based on the provided customer data. The password is considered weak if it is the combination of any information that can be easily available to anyone trying to guess the password, like a combination of day month or year of birth, or a combination of letters in name and address. You have to respond back with the strenght of the password, in terms weak, strong, very strong, along with a reason'
+        role = 'user';
         testDataRoleTag = false;
+        aioutputDivFlag = true;
         break;
       // Add more cases for other use cases
       default:
         behavior = '';
         testDataRoleTag = true;
+        aioutputDiv = false;
         break;
     }
   });
@@ -69,10 +79,15 @@ document.addEventListener('DOMContentLoaded', function() {
       content = inputText;
     }
 
+    if(!aioutputDivFlag){
+      console.log("I am resetting the aioutputDiv");
+      aioutputDiv.innerHTML = '';
+    }
+
 
     console.log("Request sent to server : ", content)
     // Add the user's input to the conversation
-    conversation.push({ role: 'user', content: content });
+    conversation.push({ role: role, content: content });
 
     // Send the entire conversation to the server for processing
     fetch('/openai', {
@@ -100,11 +115,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
       }
       else{
-        aioutputDiv.innerHTML = data.output;
+        aioutputDiv.innerHTML = data.output;  
       }
 
 
-      
+      conversation.push({ role: role, content: data.output });
       console.log("ChatGPT Response:", data.output);
     })
     .catch(function(error) {
