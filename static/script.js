@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var testDataRoleTag = true;
   var aioutputDivFlag = false;
   
+  var copyTestDataButton = document.getElementById('copyTestDataBtn'); // Get the copy button
+
   var predefinedStringCheckbox = document.getElementById('predefinedStringCheckbox');
   var count = 0;
 
@@ -28,6 +30,17 @@ document.addEventListener('DOMContentLoaded', function() {
   backBtn.addEventListener('click', function() {
     window.history.back();
   });
+
+  // Handle the Copy button click
+    copyTestDataButton.addEventListener('click', function() {
+      var range = document.createRange();
+      range.selectNode(outputDiv);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      window.getSelection().removeRange(range);
+      alert("Content copied to clipboard!");
+    });
 
   // Handle the dropdown selection and modify the behavior
     useCaseDropdown.addEventListener('change', function() {
