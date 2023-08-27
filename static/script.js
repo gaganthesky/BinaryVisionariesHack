@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', function() {
   var behavior = 'You are a Test Data Manager for a Bank, providing accounts for UAT testing, the output should always be in JSON format';
   var testDataRoleTag = true;
   var aioutputDivFlag = false;
+  
+  var predefinedStringCheckbox = document.getElementById('predefinedStringCheckbox');
+  var count = 0;
+
+  var defaultJSONPrompt = ".\nWhen you respond to me, do not give commentary. Please make your entire response a valid JSON object with valid JSON formatting and syntax.";//"\nInclude no other commentary, just provide RFC8295 compliant JSON result";
+  var jsonStructure3 = "{ \"accounts\": [ { \"name\": string, \"accountId\": string, \"phoneNumber\": string, \"creditCards\": [ { \"creditCardNumber\": string, \"availableCreditLimit\": number, \"totalCreditLimit\": number } ], \"checkingAccounts\": [ { \"accountNumber\": string, \"balance\": number } ], \"address\": { \"line1\": string, \"line2\": string, \"city\": string, \"state\": string, \"zipCode\": string }, \"email\": string } ] }";
+  var ask = ".\nWhen you respond to me, do not give commentary. Make your entire response a valid syntax JSON object, an array of accounts. Please provide the accounts in the following JSON key/value structure. : " + jsonStructure3;
 
    // Handle the Home button
   homeBtn.addEventListener('click', function() {
@@ -68,9 +75,17 @@ document.addEventListener('DOMContentLoaded', function() {
     var content;
 
     var inputText = document.getElementById('inputText').value;
-
+    
     // Append the static line to the user's input
-    var modifiedInput = inputText + ".\nWhen you respond to me, do not give commentary. Please make your entire response a valid JSON object with valid JSON formatting and syntax.";//"\nInclude no other commentary, just provide RFC8295 compliant JSON result";
+    var modifiedInput = inputText;
+    if(count == 0 && predefinedStringCheckbox.checked){
+      modifiedInput = inputText + ask; 
+      count++;
+    }
+    else{
+      modifiedInput = inputText + defaultJSONPrompt;
+    }
+    
 
     if(testDataRoleTag){
       content = modifiedInput;
@@ -98,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
       body: JSON.stringify({ conversation: conversation, behavior: behavior })
     })
     .then(function(response) {
-      console.log("Response Headers : ", response.headers);
+      //console.log("Response Headers : ", response.headers);
       return response.json();
     })
     .then(function(data) {

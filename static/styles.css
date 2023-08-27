@@ -66,4 +66,28 @@ select {
   color: #333;
 }
 
+/* Styled checkbox styles */
+.styled-checkbox {
+  display: none; /* Hide the default checkbox */
+}
+
+/* Style the label to look like a button */
+.styled-checkbox + label {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Add smooth transition */
+}
+
+/* Change label background color and text color when checked */
+.styled-checkbox:checked + label {
+  background-color: blue; /* Change background color to blue */
+  color: #fff;
+}
+
+
 /* Add more styles as needed */
